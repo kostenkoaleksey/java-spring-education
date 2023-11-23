@@ -1,0 +1,85 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="1" author="akostenko">
+        <createTable tableName="faculties">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="akostenko">
+        <createTable tableName="groups">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="faculty_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_faculty_id" referencedTableName="faculties" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="akostenko">
+        <createTable tableName="subjects">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="akostenko">
+        <createTable tableName="students">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="age" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sex" type="varchar(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_group_id" referencedTableName="groups" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="akostenko">
+        <createTable tableName="marks">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="mark" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="student_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_student_id" referencedTableName="students" referencedColumnNames="id"/>
+            </column>
+            <column name="subject_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_subject_id" referencedTableName="subjects" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="6" author="akostenko">
+        <loadData tableName="faculties" file="data/faculties.csv"/>
+        <loadData tableName="groups" file="data/groups.csv"/>
+        <loadData tableName="subjects" file="data/subjects.csv"/>
+        <loadData tableName="students" file="data/students.csv"/>
+        <loadData tableName="marks" file="data/marks.csv"/>
+    </changeSet>
+</databaseChangeLog>
