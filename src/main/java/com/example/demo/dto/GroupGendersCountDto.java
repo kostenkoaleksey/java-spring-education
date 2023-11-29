@@ -2,11 +2,11 @@ package com.example.demo.dto;
 
 import lombok.Value;
 
-import java.util.List;
 import java.util.Set;
 
 @Value
-public class GroupSubjectsDto {
+public class GroupGendersCountDto {
     GroupDto group;
-    Set<SubjectAverageMarkDto> subjects;
+    Integer maleCount;
+    Integer femaleCount;
 }

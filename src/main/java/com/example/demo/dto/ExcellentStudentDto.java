@@ -7,6 +7,6 @@ import java.util.List;
 @Value
 public class ExcellentStudentDto {
     StudentDto student;
-    List<SubjectAverageMarkDto> subjects;
+//    List<SubjectAverageMarkDto> subjects;
     Double averageMark;
 }

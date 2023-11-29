@@ -2,14 +2,20 @@ package com.example.demo.service;
 
 import com.example.demo.dto.GroupAverageMarkDto;
 import com.example.demo.dto.GroupDto;
+import com.example.demo.dto.GroupGendersCountDto;
 import com.example.demo.dto.GroupSubjectsDto;
 import com.example.demo.mapper.GroupMapper;
-import com.example.demo.mapper.SubjectMapper;
+import com.example.demo.model.Student;
 import com.example.demo.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -18,33 +24,39 @@ public class GroupServiceImpl implements GroupService {
     @Autowired
     private GroupMapper groupMapper;
 
-    @Autowired
-    private SubjectMapper subjectMapper;
-
     @Override
-    public List<GroupDto> findAll() {
+    public Set<GroupDto> findAll(Pageable pageable) {
         return groupRepository
-                .findAll()
+                .findAll(pageable)
                 .stream()
                 .map(groupMapper::map)
-                .toList();
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public List<GroupAverageMarkDto> getGroupWithAverageMark() {
+    public Set<GroupAverageMarkDto> getGroupWithAverageMark(Pageable pageable) {
         return groupRepository
-                .findAll()
+                .findGroupsWithAverageMark(pageable)
                 .stream()
-                .map(groupMapper::mapGroupAverageMark)
-                .toList();
+                .map(groupMapper::map)
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public List<GroupSubjectsDto> getGroupsWithSubjects() {
+    public Set<GroupSubjectsDto> getGroupsWithSubjectsAverageMark(Pageable pageable) {
         return groupRepository
-                .findAll()
+                .findGroupsSubjectsWithAverageMark(pageable)
                 .stream()
-                .map(groupMapper::mapGroupSubjects)
-                .toList();
+                .map(groupMapper::map)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<GroupGendersCountDto> getGroupsWhereMaleStudentsPrevailsOverFemale(Pageable pageable) {
+        return groupRepository
+                .findGroupStudentsGenderPrevailing(Student.Sex.MALE, Student.Sex.FEMALE, pageable)
+                .stream()
+                .map(groupMapper::map)
+                .collect(Collectors.toSet());
     }
 }

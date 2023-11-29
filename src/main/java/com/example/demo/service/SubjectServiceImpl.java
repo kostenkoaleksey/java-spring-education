@@ -5,6 +5,7 @@ import com.example.demo.dto.SubjectDto;
 import com.example.demo.mapper.SubjectMapper;
 import com.example.demo.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,18 +18,18 @@ public class SubjectServiceImpl implements SubjectService {
     private SubjectMapper mapper;
 
     @Override
-    public List<SubjectDto> findAll() {
+    public List<SubjectDto> findAll(Pageable pageable) {
         return subjectRepository
-                .findAll()
+                .findAll(pageable)
                 .stream()
                 .map(mapper::map)
                 .toList();
     }
 
     @Override
-    public List<SubjectAverageMarkDto> listSubjectsWithAverageMarks() {
+    public List<SubjectAverageMarkDto> listSubjectsWithAverageMarks(Pageable pageable) {
         return subjectRepository
-                .findAll()
+                .findSubjectsAverageMark(pageable)
                 .stream()
                 .map(mapper::mapSubjectAverageMark)
                 .toList();

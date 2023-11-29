@@ -3,13 +3,13 @@ package com.example.demo.service;
 import com.example.demo.dto.ExcellentStudentDto;
 import com.example.demo.dto.StudentDto;
 import com.example.demo.mapper.StudentMapper;
-import com.example.demo.model.Student;
 import com.example.demo.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -18,36 +18,39 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentMapper studentMapper;
 
-    @Autowired
-    private MarkService markService;
-
     @Override
-    public List<StudentDto> findAll() {
+    public Set<StudentDto> findAll(Pageable pageable) {
         return studentRepository
-                .findAll()
+                .findAll(pageable)
                 .stream()
                 .map(studentMapper::map)
-                .toList();
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public List<StudentDto> listStudentsWithDraftArmyAge() {
+    public Set<StudentDto> listStudentsWithDraftArmyAge(Pageable pageable) {
         return studentRepository
-                .findByAgeBetweenOrderByAge(StudentService.startDraftArmyAge, StudentService.endDraftArmyAge)
+                .findByAgeBetween(StudentService.startDraftArmyAge, StudentService.endDraftArmyAge, pageable)
                 .stream()
-                .sorted(Comparator.comparingInt(Student::getAge))
                 .map(studentMapper::map)
-                .toList();
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public List<ExcellentStudentDto> listExcellentStudents() {
+    public Set<ExcellentStudentDto> listExcellentStudents(Pageable pageable) {
         return studentRepository
-                .findAll()
+                .findExcellentStudents(StudentService.averageMarkForExcellentStudent, pageable)
                 .stream()
-                .filter(s -> markService.getAverageMark(s.getMarks()) >= 90)
-                .sorted(Comparator.comparingLong(Student::getId))
-                .map(studentMapper::mapExcellentStudent)
-                .toList();
+                .map(studentMapper::map)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<StudentDto> getStudentsByFacultyId(Long facultyId, Pageable pageable) {
+        return studentRepository
+                .findStudentsByFacultyId(facultyId, pageable)
+                .stream()
+                .map(studentMapper::map)
+                .collect(Collectors.toSet());
     }
 }

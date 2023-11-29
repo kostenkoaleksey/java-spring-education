@@ -1,68 +1,68 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.GroupAverageMarkDto;
-import com.example.demo.dto.GroupDto;
-import com.example.demo.dto.GroupSubjectsDto;
-import com.example.demo.dto.SubjectAverageMarkDto;
+import com.example.demo.dto.*;
 import com.example.demo.model.Group;
-import com.example.demo.model.Mark;
-import com.example.demo.model.Student;
-import com.example.demo.service.MarkService;
+import com.example.demo.model.projection.GroupAverageMark;
+import com.example.demo.model.projection.GroupAverageMarkPerSubject;
+import com.example.demo.model.projection.GroupGenderCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class GroupMapperImpl implements GroupMapper {
     @Autowired
     private SubjectMapper subjectMapper;
 
-    @Autowired
-    private MarkService markService;
+    @Override
+    public GroupDto map(Long id, String title) {
+        return new GroupDto(
+                id,
+                title
+        );
+    }
 
     @Override
     public GroupDto map(Group group) {
-        return new GroupDto(
+        return map(
                 group.getId(),
                 group.getTitle()
         );
     }
 
     @Override
-    public GroupAverageMarkDto mapGroupAverageMark(Group group) {
-        List<Mark> groupMarks = group
-                .getStudents()
-                .stream()
-                .map(Student::getMarks)
-                .flatMap(Collection::stream)
-                .toList();
-
+    public GroupAverageMarkDto map(GroupAverageMark item) {
         return new GroupAverageMarkDto(
-                map(group),
-                markService.getAverageMark(groupMarks)
+                map(item.getGroup()),
+                item.getAverageMark()
         );
     }
 
     @Override
-    public GroupSubjectsDto mapGroupSubjects(Group group) {
-        List<Mark> groupMarks = group
-                .getStudents()
-                .stream()
-                .map(Student::getMarks)
-                .flatMap(Collection::stream)
-                .toList();
-
-        List<SubjectAverageMarkDto> subjects = markService.getSubjectsAverageMarks(groupMarks)
-                .entrySet()
+    public GroupSubjectsDto map(GroupAverageMarkPerSubject item) {
+        Set<SubjectAverageMarkDto> subjects = item
+                .getSubjectsAverageMark()
                 .stream()
                 .map(subjectMapper::mapSubjectAverageMark)
-                .toList();
+                .collect(Collectors.toSet());
 
         return new GroupSubjectsDto(
-                map(group),
+                map(
+                        item.getId(),
+                        item.getTitle()
+                ),
                 subjects
+        );
+    }
+
+    @Override
+    public GroupGendersCountDto map(GroupGenderCount item) {
+        return new GroupGendersCountDto(
+                map(item.getId(), item.getTitle()),
+                item.getMaleCount(),
+                item.getFemaleCount()
         );
     }
 }

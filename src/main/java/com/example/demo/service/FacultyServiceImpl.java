@@ -9,6 +9,7 @@ import com.example.demo.model.Group;
 import com.example.demo.model.Student;
 import com.example.demo.repository.FacultyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -21,34 +22,19 @@ public class FacultyServiceImpl implements FacultyService {
     private FacultyRepository facultyRepository;
     @Autowired
     private FacultyMapper mapper;
-    @Autowired
-    private StudentMapper studentMapper;
 
     @Override
-    public List<FacultyDto> findAll() {
+    public List<FacultyDto> findAll(Pageable pageable) {
         return facultyRepository
-                .findAll()
+                .findAll(pageable)
                 .stream()
                 .map(mapper::map)
                 .toList();
     }
 
     @Override
-    public FacultyDto findById(Long id) {
+    public FacultyDto findById(Long id, Pageable pageable) {
         Faculty faculty = facultyRepository.getReferenceById(id);
         return mapper.map(faculty);
-    }
-
-    @Override
-    public List<StudentDto> getStudentsByFacultyId(Long facultyId) {
-        return facultyRepository
-                .getReferenceById(facultyId)
-                .getGroups()
-                .stream()
-                .map(Group::getStudents)
-                .flatMap(Collection::stream)
-                .sorted(Comparator.comparingLong(Student::getId))
-                .map(studentMapper::map)
-                .toList();
     }
 }

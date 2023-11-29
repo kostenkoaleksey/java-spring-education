@@ -4,6 +4,7 @@ import com.example.demo.dto.SubjectAverageMarkDto;
 import com.example.demo.dto.SubjectDto;
 import com.example.demo.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,12 +16,12 @@ public class SubjectController {
     private SubjectService subjectService;
 
     @GetMapping("/subjects")
-    public List<SubjectDto> list() {
-        return subjectService.findAll();
+    public List<SubjectDto> list(Pageable pageable) {
+        return subjectService.findAll(pageable);
     }
 
     @GetMapping("/subjects/average-marks")
-    public List<SubjectAverageMarkDto> listAverageMarks() {
-        return subjectService.listSubjectsWithAverageMarks();
+    public List<SubjectAverageMarkDto> listAverageMarks(Pageable pageable) {
+        return subjectService.listSubjectsWithAverageMarks(pageable);
     }
 }
