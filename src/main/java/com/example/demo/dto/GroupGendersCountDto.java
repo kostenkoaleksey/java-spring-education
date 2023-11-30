@@ -2,11 +2,10 @@ package com.example.demo.dto;
 
 import lombok.Value;
 
-import java.util.Set;
-
 @Value
 public class GroupGendersCountDto {
-    GroupDto group;
+    Long id;
+    String title;
     Integer maleCount;
     Integer femaleCount;
 }

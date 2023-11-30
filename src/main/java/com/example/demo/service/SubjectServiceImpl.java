@@ -15,14 +15,14 @@ public class SubjectServiceImpl implements SubjectService {
     @Autowired
     private SubjectRepository subjectRepository;
     @Autowired
-    private SubjectMapper mapper;
+    private SubjectMapper subjectMapper;
 
     @Override
     public List<SubjectDto> findAll(Pageable pageable) {
         return subjectRepository
                 .findAll(pageable)
                 .stream()
-                .map(mapper::map)
+                .map(subjectMapper::mapSubjectToSubjectDto)
                 .toList();
     }
 
@@ -31,7 +31,7 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectRepository
                 .findSubjectsAverageMark(pageable)
                 .stream()
-                .map(mapper::mapSubjectAverageMark)
+                .map(subjectMapper::mapSubjectAverageMarkToSubjectAverageMarkDto)
                 .toList();
     }
 }

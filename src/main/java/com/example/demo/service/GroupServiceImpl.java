@@ -11,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,7 +26,7 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository
                 .findAll(pageable)
                 .stream()
-                .map(groupMapper::map)
+                .map(groupMapper::mapGroupToGroupDto)
                 .collect(Collectors.toSet());
     }
 
@@ -38,7 +35,7 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository
                 .findGroupsWithAverageMark(pageable)
                 .stream()
-                .map(groupMapper::map)
+                .map(groupMapper::mapGroupAverageMarkToGroupAverageMarkDto)
                 .collect(Collectors.toSet());
     }
 
@@ -47,7 +44,7 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository
                 .findGroupsSubjectsWithAverageMark(pageable)
                 .stream()
-                .map(groupMapper::map)
+                .map(groupMapper::mapGroupAverageMarkPerSubjectToGroupSubjectsDto)
                 .collect(Collectors.toSet());
     }
 
@@ -56,7 +53,7 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository
                 .findGroupStudentsGenderPrevailing(Student.Sex.MALE, Student.Sex.FEMALE, pageable)
                 .stream()
-                .map(groupMapper::map)
+                .map(groupMapper::mapGroupGenderCountToGroupGendersCountDto)
                 .collect(Collectors.toSet());
     }
 }

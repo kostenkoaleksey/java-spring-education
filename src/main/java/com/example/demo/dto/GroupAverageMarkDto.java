@@ -5,7 +5,8 @@ import lombok.Value;
 
 @Value
 public class GroupAverageMarkDto {
-    GroupDto group;
+    Long id;
+    String title;
     @NonNull
     Double averageMark;
 }

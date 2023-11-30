@@ -4,9 +4,14 @@ import com.example.demo.dto.SubjectAverageMarkDto;
 import com.example.demo.dto.SubjectDto;
 import com.example.demo.model.Subject;
 import com.example.demo.model.projection.SubjectAverageMark;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
+@Mapper(componentModel = "spring")
 public interface SubjectMapper {
-    SubjectDto map(Subject subject);
+    SubjectDto mapSubjectToSubjectDto(Subject subject);
 
-    SubjectAverageMarkDto mapSubjectAverageMark(SubjectAverageMark subject);
+    @Mapping(source = "subject.id", target = "id")
+    @Mapping(source = "subject.title", target = "title")
+    SubjectAverageMarkDto mapSubjectAverageMarkToSubjectAverageMarkDto(SubjectAverageMark subjectAverageMark);
 }

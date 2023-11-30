@@ -23,7 +23,7 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository
                 .findAll(pageable)
                 .stream()
-                .map(studentMapper::map)
+                .map(studentMapper::mapStudentToStudentDto)
                 .collect(Collectors.toSet());
     }
 
@@ -32,7 +32,7 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository
                 .findByAgeBetween(StudentService.startDraftArmyAge, StudentService.endDraftArmyAge, pageable)
                 .stream()
-                .map(studentMapper::map)
+                .map(studentMapper::mapStudentToStudentDto)
                 .collect(Collectors.toSet());
     }
 
@@ -41,7 +41,7 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository
                 .findExcellentStudents(StudentService.averageMarkForExcellentStudent, pageable)
                 .stream()
-                .map(studentMapper::map)
+                .map(studentMapper::mapStudentAverageMarkToExcellentStudentDto)
                 .collect(Collectors.toSet());
     }
 
@@ -50,7 +50,7 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository
                 .findStudentsByFacultyId(facultyId, pageable)
                 .stream()
-                .map(studentMapper::map)
+                .map(studentMapper::mapStudentToStudentDto)
                 .collect(Collectors.toSet());
     }
 }

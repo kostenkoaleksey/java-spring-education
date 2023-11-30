@@ -1,11 +1,10 @@
 package com.example.demo.dto;
 
-import lombok.NonNull;
 import lombok.Value;
 
 @Value
 public class SubjectAverageMarkDto {
-    @NonNull
-    SubjectDto subject;
+    Long id;
+    String title;
     Double averageMark;
 }
