@@ -9,5 +9,5 @@ import java.util.List;
 public interface FacultyService {
     List<FacultyDto> findAll(Pageable pageable);
 
-    FacultyDto findById(Long id, Pageable pageable);
+    FacultyDto findById(Long id);
 }

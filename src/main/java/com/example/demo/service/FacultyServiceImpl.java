@@ -27,7 +27,7 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public FacultyDto findById(Long id, Pageable pageable) {
+    public FacultyDto findById(Long id) {
         Faculty faculty = facultyRepository.getReferenceById(id);
         return facultyMapper.mapFacultyToFacultyDto(faculty);
     }

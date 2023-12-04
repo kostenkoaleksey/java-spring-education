@@ -11,8 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -22,38 +21,38 @@ public class GroupServiceImpl implements GroupService {
     private GroupMapper groupMapper;
 
     @Override
-    public Set<GroupDto> findAll(Pageable pageable) {
+    public List<GroupDto> findAll(Pageable pageable) {
         return groupRepository
                 .findAll(pageable)
                 .stream()
                 .map(groupMapper::mapGroupToGroupDto)
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     @Override
-    public Set<GroupAverageMarkDto> getGroupWithAverageMark(Pageable pageable) {
+    public List<GroupAverageMarkDto> getGroupWithAverageMark(Pageable pageable) {
         return groupRepository
                 .findGroupsWithAverageMark(pageable)
                 .stream()
                 .map(groupMapper::mapGroupAverageMarkToGroupAverageMarkDto)
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     @Override
-    public Set<GroupSubjectsDto> getGroupsWithSubjectsAverageMark(Pageable pageable) {
+    public List<GroupSubjectsDto> getGroupsWithSubjectsAverageMark(Pageable pageable) {
         return groupRepository
                 .findGroupsSubjectsWithAverageMark(pageable)
                 .stream()
                 .map(groupMapper::mapGroupAverageMarkPerSubjectToGroupSubjectsDto)
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     @Override
-    public Set<GroupGendersCountDto> getGroupsWhereMaleStudentsPrevailsOverFemale(Pageable pageable) {
+    public List<GroupGendersCountDto> getGroupsWhereMaleStudentsPrevailsOverFemale(Pageable pageable) {
         return groupRepository
                 .findGroupStudentsGenderPrevailing(Student.Sex.MALE, Student.Sex.FEMALE, pageable)
                 .stream()
                 .map(groupMapper::mapGroupGenderCountToGroupGendersCountDto)
-                .collect(Collectors.toSet());
+                .toList();
     }
 }

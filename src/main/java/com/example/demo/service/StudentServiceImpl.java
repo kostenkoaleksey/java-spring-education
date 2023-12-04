@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,38 +19,38 @@ public class StudentServiceImpl implements StudentService {
     private StudentMapper studentMapper;
 
     @Override
-    public Set<StudentDto> findAll(Pageable pageable) {
+    public List<StudentDto> findAll(Pageable pageable) {
         return studentRepository
                 .findAll(pageable)
                 .stream()
                 .map(studentMapper::mapStudentToStudentDto)
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     @Override
-    public Set<StudentDto> listStudentsWithDraftArmyAge(Pageable pageable) {
+    public List<StudentDto> listStudentsWithDraftArmyAge(Pageable pageable) {
         return studentRepository
                 .findByAgeBetween(StudentService.startDraftArmyAge, StudentService.endDraftArmyAge, pageable)
                 .stream()
                 .map(studentMapper::mapStudentToStudentDto)
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     @Override
-    public Set<ExcellentStudentDto> listExcellentStudents(Pageable pageable) {
+    public List<ExcellentStudentDto> listExcellentStudents(Pageable pageable) {
         return studentRepository
                 .findExcellentStudents(StudentService.averageMarkForExcellentStudent, pageable)
                 .stream()
                 .map(studentMapper::mapStudentAverageMarkToExcellentStudentDto)
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     @Override
-    public Set<StudentDto> getStudentsByFacultyId(Long facultyId, Pageable pageable) {
+    public List<StudentDto> getStudentsByFacultyId(Long facultyId, Pageable pageable) {
         return studentRepository
                 .findStudentsByFacultyId(facultyId, pageable)
                 .stream()
                 .map(studentMapper::mapStudentToStudentDto)
-                .collect(Collectors.toSet());
+                .toList();
     }
 }

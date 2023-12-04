@@ -7,13 +7,13 @@ import com.example.demo.dto.GroupSubjectsDto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Set;
 
 public interface GroupService {
-    Set<GroupDto> findAll(Pageable pageable);
+    List<GroupDto> findAll(Pageable pageable);
 
-    Set<GroupAverageMarkDto> getGroupWithAverageMark(Pageable pageable);
+    List<GroupAverageMarkDto> getGroupWithAverageMark(Pageable pageable);
 
-    Set<GroupSubjectsDto> getGroupsWithSubjectsAverageMark(Pageable pageable);
-    Set<GroupGendersCountDto> getGroupsWhereMaleStudentsPrevailsOverFemale(Pageable pageable);
+    List<GroupSubjectsDto> getGroupsWithSubjectsAverageMark(Pageable pageable);
+
+    List<GroupGendersCountDto> getGroupsWhereMaleStudentsPrevailsOverFemale(Pageable pageable);
 }

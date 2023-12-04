@@ -5,7 +5,6 @@ import com.example.demo.dto.StudentDto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Set;
 
 public interface StudentService {
     Integer startDraftArmyAge = 20;
@@ -13,10 +12,11 @@ public interface StudentService {
 
     Integer averageMarkForExcellentStudent = 90;
 
-    Set<StudentDto> findAll(Pageable pageable);
+    List<StudentDto> findAll(Pageable pageable);
 
-    Set<StudentDto> listStudentsWithDraftArmyAge(Pageable pageable);
-    Set<ExcellentStudentDto> listExcellentStudents(Pageable pageable);
+    List<StudentDto> listStudentsWithDraftArmyAge(Pageable pageable);
 
-    Set<StudentDto> getStudentsByFacultyId(Long facultyId, Pageable pageable);
+    List<ExcellentStudentDto> listExcellentStudents(Pageable pageable);
+
+    List<StudentDto> getStudentsByFacultyId(Long facultyId, Pageable pageable);
 }
