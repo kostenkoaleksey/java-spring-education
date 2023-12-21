@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.FacultyDto;
+import com.example.demo.exception.FacultyNotFoundException;
 import com.example.demo.mapper.FacultyMapper;
 import com.example.demo.model.Faculty;
 import com.example.demo.repository.FacultyRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,12 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public FacultyDto findById(Long id) {
-        Faculty faculty = facultyRepository.getReferenceById(id);
-        return facultyMapper.mapFacultyToFacultyDto(faculty);
+    public FacultyDto findById(Long id) throws FacultyNotFoundException {
+        try {
+            Faculty faculty = facultyRepository.getReferenceById(id);
+            return facultyMapper.mapFacultyToFacultyDto(faculty);
+        } catch (EntityNotFoundException e) {
+            throw new FacultyNotFoundException("Faculty with id:" + id + " not found.");
+        }
     }
 }

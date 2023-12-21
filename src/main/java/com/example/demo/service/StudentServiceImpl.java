@@ -2,8 +2,11 @@ package com.example.demo.service;
 
 import com.example.demo.dto.ExcellentStudentDto;
 import com.example.demo.dto.StudentDto;
+import com.example.demo.exception.FacultyNotFoundException;
 import com.example.demo.mapper.StudentMapper;
+import com.example.demo.repository.FacultyRepository;
 import com.example.demo.repository.StudentRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,10 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private FacultyServiceImpl facultyService;
+
     @Autowired
     private StudentMapper studentMapper;
 
@@ -46,11 +53,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentDto> getStudentsByFacultyId(Long facultyId, Pageable pageable) {
-        return studentRepository
-                .findStudentsByFacultyId(facultyId, pageable)
-                .stream()
-                .map(studentMapper::mapStudentToStudentDto)
-                .toList();
+    public List<StudentDto> getStudentsByFacultyId(Long facultyId, Pageable pageable) throws FacultyNotFoundException {
+            facultyService.findById(facultyId);
+
+            return studentRepository
+                    .findStudentsByFacultyId(facultyId, pageable)
+                    .stream()
+                    .map(studentMapper::mapStudentToStudentDto)
+                    .toList();
     }
 }
